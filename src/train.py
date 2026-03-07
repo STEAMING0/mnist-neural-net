@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Initializes the dataset and splits it into training and development sets. The pixel values are normalized to be between 0 and 1 by dividing by 255.
-data = pd.read_csv('MNIST.csv')
+data = pd.read_csv('./data/MNIST.csv')
 
 data = np.array(data)
 m, n = data.shape
@@ -116,30 +116,3 @@ def make_prediction(X, w1, b1, w2, b2, w3, b3):
     _, _, _, _, _, a3 = forward_prop(w1, b1, w2, b2, w3, b3, X)
     return np.argmax(a3, axis=0)
 
-# Displays the predicted label and the actual label for a given index in the training set, along with the image.
-def display_prediction(index, w1, b1, w2, b2, w3, b3):
-    image = x_train[:, index:index+1]
-
-    prediction = make_prediction(image, w1, b1, w2, b2, w3, b3)
-    y_sample = y_train[index]
-
-    print("Prediction:", prediction[0])
-    print("Label:", y_sample)
-
-    plt.imshow(image.reshape(28, 28), cmap='gray')
-    plt.axis('off')
-    plt.show()
-
-# Trains neural network using gradient descent, 1000 iterations and a high learning rate alpha
-
-if __name__ == "__main__":
-    w1, b1, w2, b2, w3, b3 = gradient_descent(x_train, y_train, alpha=0.1, epochs=500)
-
-    while True:
-        user = input("Enter an index of the training set to see prediction (or 'q' to quit): ")
-        if user.lower() == 'q':
-            break
-        if not user.isdigit() or int(user) < 0 or int(user) >= x_train.shape[1]:
-            print(f"Please enter a valid index between 0 and {x_train.shape[1]-1}")
-            continue
-        display_prediction(int(user), w1, b1, w2, b2, w3, b3)
